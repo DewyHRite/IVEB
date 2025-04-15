@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Cart Page</title>
+  <style>
+        body {
+          display: flex;
+          flex-direction: column;
+          zoom: 80%; /* Adjust the zoom to 80% */
+          align-items: center;
+          height: 100%; /* Full height of the viewport */
+          background: linear-gradient(-45deg, #3fd2c7, #99ddff, #00458b, #3fd2c7);
+          background-size: 400% 400%; /* Ensure smooth animation */
+          animation: gradientBG 15s ease infinite;  /* Animation for background gradient */
+          font-family: Arial, sans-serif;
+          padding-top: 100px;  /* Push all content below the navbar */
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        html, body {
+          height: 100vh;
+          width: 100%;
+        }
+
+
+        #cartTitle {
+          text-align: center;
+          position: relative;
+          font-size: 2rem; /* Adjust font size as needed */
+          font-weight: bold;
+          color: #0f7ae6; /* Optional: Adjust color to match your theme */
+        }
+            
+        .checkoutContainer {
+          position: fixed;
+          display: center;
+          flex-wrap: wrap; /* Allow wrapping based on available space */
+          flex-direction: column;
+          justify-content: right;
+          background-color: #000000; /* Background color */
+          padding: 80px 40px; /* Padding for size */
+          border-radius: 50px; /* Rounded corners */
+          font-weight: bold; /* Bold text */
+          margin-top: 100px;
+          width: auto; /* Adjust width dynamically */
+          max-width: auto; /* Ensure it doesn't exceed the viewport width */
+          left: 80%; /* Move it more to the right */
+        }
+
+        .cartbuttons {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #00458b; /* Background color */
+          padding: 5px 5px; /* Padding for size */
+          border-radius: 10px; /* Rounded corners */
+          font-size: 1.2rem; /* Font size */
+          font-weight: bold; /* Bold text */
+          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+          transition: all 0.3s ease-in-out; /* Smooth animation */
+          text-align: center; /* Align content in the center */
+        }
+
+        .cartbuttons button {
+          color: #99ddff; /* Text color same as background color */
+          background-color: transparent; /* Transparent background */
+          border: none; /* Remove border */
+          cursor: pointer; /* Pointer cursor on hover */
+          text-align: center; /* Align button text */
+          margin-top: auto; /* Slightly lower the button */
+          align-items: middle; /* Center align the button vertically */
+            }
+
+        .cartbuttons button:hover {
+          color: #99ddff; /* Change text color on hover */
+        }  
+            
+        .buttons {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #00458b; /* Background color */
+          padding: 10px 20px; /* Padding for size */
+          border-radius: 10px; /* Rounded corners */
+          font-size: 1.2rem; /* Font size */
+          font-weight: bold; /* Bold text */
+          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+          transition: all 0.3s ease-in-out; /* Smooth animation */
+        }
+
+        .buttons button {
+          color: #99ddff; /* Text color same as background color */
+          background-color: transparent; /* Transparent background */
+          border: none; /* Remove border */
+          cursor: pointer; /* Pointer cursor on hover */
+        }
+
+        .buttons button:hover {
+          color: #99ddff; /* Change text color on hover */
+        }            
+
+        .container {
+          display: flex;
+          margin-top: 1%;
+          margin-bottom: 100px;      
+          flex-direction: row; /* Stack items vertically */
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: center;
+          width: 100%; /* Set the desired width */
+          height: auto; /* Set the desired height */
+          padding: 20px; /* Ensure padding is explicitly defined */
+          border-radius: 20px; /* Rounded corners */
+
+          background: rgba(255, 255, 255, 0.15);
+          backdrop-filter: blur(12px);
+          border-radius: 15px;
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+          backdrop-filter: blur(12px);
+          transition: background-color 0.3s ease; /* Smooth transition for background color */
+        }
+
+        .product-image img {
+          width: 100%;
+          height: 80%;
+          object-fit: cover;
+          transition: transform 0.5s;
+          border-radius: 15px;
+        }
+
+        .product-image:hover img {
+        transform: scale(1.1);
+        }
+
+        .header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 1001; /* Ensure header is above other elements */
+        }
+        .navbar {
+          position: fixed; /* Sticks the navbar to a fixed position */
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          max-width: auto;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          padding: 20px 200px;
+          z-index: 1002; ;
+          opacity: 1;
+          background-color:  #000000; /* Add background color to navbar */
+          height: 60px; /* Fixed height for the navbar */
+        }
+
+        .navbar .logo a {
+          font-size: 1.8rem;
+          text-decoration: none;
+          color: #00458b;
+        }
+
+        .navbar .links {
+          display: flex;
+          align-items: center;
+          list-style: none;
+          gap: 35px;
+        }
+
+        .navbar .links a {
+          font-weight: 500;
+          text-decoration: none;
+          color: #fff;
+          padding: 10px 0;
+          transition: 0.2s ease;
+        }
+
+        .navbar .links a:hover {
+          color: #99ddff;
+        }
+
+        .navbar .buttons a {
+          text-decoration: none;
+          color: #fff;
+          font-size: 1rem;
+          padding: 15px 0;
+          transition: 0.2s ease;
+        }
+
+        .navbar .buttons a:not(:last-child) {
+          margin-right: 30px;
+        }
+
+
+        /* Hamburger menu styles */
+        #menu-toggle {
+          display: none;
+        }
+
+        #hamburger-btn {
+          font-size: 1.8rem;
+          color: #fff;
+          cursor: pointer;
+          display: none;
+          order: 1;
+        }
+
+        @media screen and (max-width: 1023px) {
+          .navbar .logo a {
+              font-size: 1.5rem;
+          }
+
+          .links {
+              position: fixed;
+              left: -100%;
+              top: 75px;
+              width: 100%;
+              height: 100vh;
+              padding-top: 50px;
+              background: #000000;
+              flex-direction: column;
+              transition: 0.3s ease;
+          }
+
+          .navbar #menu-toggle:checked ~ .links {
+              left: 0;
+          }
+
+          .navbar #hamburger-btn {
+              display: block;
+          }
+        }
+  </style>
+  <script>
+    // Global cart array loaded from localStorage
+    let cart = JSON.parse(localStorage.getItem("cart")) || []; 
+  
+    window.onload = function () {
+      renderCartTable(); // Render cart table on page load
+      updateCheckoutDetails(); // Update checkout details on page load
+    };
+  
+    // Function to render the cart table
+    function renderCartTable() {
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (!currentUser) {
+            alert('You must be logged in to view the cart.');
+            return;
+        }
+
+        const userTRN = currentUser.trn;
+
+        // Retrieve cart data for this user
+        const cartData = JSON.parse(localStorage.getItem('CartData')) || {};
+        const userCart = cartData[userTRN] || [];
+
+        const cartTable = document.getElementById("cartTable");
+        cartTable.innerHTML = ""; // Clear existing content
+
+        userCart.forEach((item, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td class="product-image" align="center" style="width: 20%; height: 20%;">
+                <img src="${item.image}" alt="${item.name}" style="width: 70%; height: auto;">
+                
+                <div class="cartbuttons"><button onclick="removeItem(${index})">Remove</button></div>
+              </td>
+              <td align="center">${item.name}</td>
+              <td align="center">$${item.price.toFixed(2)}</td>
+              <td align="center">
+                <input type="number" value="${item.quantity}" min="1" style="width: 50px;" onchange="updateQuantity(${index}, this.value)">
+              </td>
+              <td align="center" id="total-${index}">$${(item.price * item.quantity).toFixed(2)}</td>
+            `;
+            cartTable.appendChild(row);
+        });
+    }
+  
+    // Function to update checkout details
+    function updateCheckoutDetails() {
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (!currentUser) {
+            alert('You must be logged in to view checkout details.');
+            return;
+        }
+
+        const userTRN = currentUser.trn;
+
+        // Retrieve cart data for this user
+        const cartData = JSON.parse(localStorage.getItem('CartData')) || {};
+        const userCart = cartData[userTRN] || [];
+
+        const befortaxtotal = userCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const shipping = 750; // Flat shipping cost
+        const salesTax = befortaxtotal * 0.15; // 15% sales tax
+        const aftertaxtotal = befortaxtotal + salesTax + shipping;
+
+        document.getElementById("checkoutDetails").innerHTML = `
+            <p>Subtotal (Before Tax): $${befortaxtotal.toFixed(2)}</p>
+            <p>Sales Tax: $${salesTax.toFixed(2)}</p>
+            <p>Shipping: $${shipping.toFixed(2)}</p>
+            <p>Total (After Tax): $${aftertaxtotal.toFixed(2)}</p>
+        `;
+
+        // Update totals in localStorage
+        localStorage.setItem('total', befortaxtotal.toFixed(2));
+        localStorage.setItem('aftertax', aftertaxtotal.toFixed(2));
+        localStorage.setItem('salesTax', salesTax.toFixed(2));
+    }
+  
+    // Function to update item quantity
+    function updateQuantity(index, newQuantity) {
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (!currentUser) {
+            alert('You must be logged in to update the cart.');
+            return;
+        }
+
+        const userTRN = currentUser.trn;
+
+        // Retrieve cart data for this user
+        const cartData = JSON.parse(localStorage.getItem('CartData')) || {};
+        const userCart = cartData[userTRN] || [];
+
+        userCart[index].quantity = parseInt(newQuantity);
+        cartData[userTRN] = userCart; // Update cart data for this user
+        localStorage.setItem("CartData", JSON.stringify(cartData));
+
+        document.getElementById(`total-${index}`).innerText = `$${(userCart[index].price * userCart[index].quantity).toFixed(2)}`;
+        renderCartTable();
+        updateCheckoutDetails();
+    }
+  
+    // Function to remove an item from the cart
+    function removeItem(index) {
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (!currentUser) {
+            alert('You must be logged in to update the cart.');
+            return;
+        }
+
+        const userTRN = currentUser.trn;
+
+        // Retrieve cart data for this user
+        const cartData = JSON.parse(localStorage.getItem('CartData')) || {};
+        const userCart = cartData[userTRN] || [];
+
+        userCart.splice(index, 1); // Remove item from the user's cart
+        cartData[userTRN] = userCart; // Update cart data for this user
+        localStorage.setItem("CartData", JSON.stringify(cartData));
+
+        renderCartTable();
+        updateCheckoutDetails();
+    }
+  
+    // Function to clear the entire cart
+    function clearCart() {
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (!currentUser) {
+            alert('You must be logged in to clear the cart.');
+            return;
+        }
+
+        const userTRN = currentUser.trn;
+
+        // Retrieve cart data for this user
+        const cartData = JSON.parse(localStorage.getItem('CartData')) || {};
+        cartData[userTRN] = []; // Clear the user's cart
+        localStorage.setItem("CartData", JSON.stringify(cartData));
+
+        renderCartTable();
+        updateCheckoutDetails();
+        alert("Shopping cart cleared!");
+    }
+    
+      // Function to close the shopping cart view
+    function closeCart() {
+      const cartContainer = document.querySelector('.container');
+      if (cartContainer) {
+        cartContainer.style.display = 'none'; // Hide the cart view
+        alert('Shopping cart view closed!');
+      }
+    }
+
+    // Function to restore (open) the shopping cart view
+    function openCart() {
+      const cartContainer = document.querySelector('.container');
+      if (cartContainer) {
+        cartContainer.style.display = 'flex'; // Show the cart view
+        alert('Shopping cart view restored!');
+      }
+    }
+    // Function to handle checkout
+    function checkout() {
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (!currentUser) {
+            alert('You must be logged in to proceed to checkout.');
+            return;
+        }
+
+        const userTRN = currentUser.trn;
+
+        // Retrieve cart data for this user
+        const cartData = JSON.parse(localStorage.getItem('CartData')) || {};
+        const userCart = cartData[userTRN] || [];
+
+        if (userCart.length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+
+        // Save cart data to localStorage
+        localStorage.setItem('CartData', JSON.stringify(cartData));
+
+        // Redirect to the checkout page
+        window.location.href = "Checkout.html";
+    }
+
+    // Validate session on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        
+        if (!currentUser) {
+            // Redirect to login if no active session
+            window.location.href = 'Login.html';
+        }
+    }); 
+
+    window.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (currentUser) {
+                const navbar = document.querySelector('.navbar .links');
+                const userGreeting = document.createElement('li');
+                userGreeting.textContent = `Hi, ${currentUser.name}`;
+                userGreeting.style.color = '#fff';
+                userGreeting.style.fontWeight = 'bold';
+                userGreeting.style.marginLeft = '0px'; // Adjust spacing
+                userGreeting.style.whiteSpace = 'nowrap'; // Prevent text wrapping
+                navbar.appendChild(userGreeting);
+            }
+        });
+  </script>
+</head>
+  <body>
+    <div>
+      <header class="header">
+        <nav class="navbar">
+          <nav class="navbar">
+            <img width="5%" height="auto" src="Assets/LogoB.png" alt="Picture not found" style="margin-right: 100px;"/>
+            <h3 class="logo"><a align="left">Island Vybz Electric Bikes</a></h3>
+          <input type="checkbox" id="menu-toggle" />
+          <label for="menu-toggle" id="hamburger-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+              <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </label>
+          <ul class="links">
+            <li>
+                <a href="AboutUs.html">About Us </a>
+            </li>
+            <li> 
+                <a href="Login.html">Logout</a></button>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <table border="0" align="center">
+        <tr>
+          <td >
+            <h1 id="cartTitle">Shopping Cart</h1>
+            <div class="container">
+              <table border="0" >
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="cartTable"></tbody>
+              </table>
+            </div>
+          </td>
+          <td rowspan="10" align="left"  width="25%" valign="top" style="color: #99ddff;">
+            <div align="center"  class="checkoutContainer">
+              <h3>Proceed to Checkout<h3></h3>
+              <p id="checkoutDetails"></p><br>
+              <div class="buttons">
+                <button onclick="clearCart()">Clear All</button> <!-- Clear All Button -->             
+              </div><br>
+              <div class="buttons">
+                <button onclick="checkout()">Checkout</button> <!-- Checkout Button -->
+              </div><br>
+              <div class="buttons">
+                <button onclick="closeCart()">Close Cart View</button> <!-- Close Button -->              
+              </div><br>
+              <div class="buttons">
+                <button onclick="openCart()">Restore Cart View</button> <!-- Close Button -->              
+              </div><br>
+                <center><a href="ProductPage.html" style="text-align: center; color: #99ddff;">Back to Product Page</a></center>
+            </div>
+          </td>
+        </tr>
+      </table>
+  </body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            zoom: 90%; /* Adjust the zoom to 80% */
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(-45deg, #3fd2c7, #99ddff, #00458b, #3fd2c7);
+            background-size: 400% 400%;
+            min-height: 100vh;
+            animation: gradientBG 15s ease infinite;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1001;
+        }
+
+        .navbar {
+            position: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: auto;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            padding: 20px 200px;
+            z-index: 1002;
+            opacity: 1;
+            background-color: #000000;
+            height: 60px;
+        }
+
+        .navbar .logo a {
+            font-size: 1.8rem;
+            text-decoration: none;
+            color: #00458b;
+        }
+
+        .navbar .links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 35px;
+        }
+
+        .navbar .links a {
+            font-weight: 500;
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 0;
+            transition: 0.2s ease;
+        }
+
+        .navbar .links a:hover {
+            color: #99ddff;
+        }
+
+        .navbar .buttons a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1rem;
+            padding: 15px 0;
+            transition: 0.2s ease;
+        }
+
+        .navbar .buttons a:not(:last-child) {
+            margin-right: 30px;
+        }
+
+        #menu-toggle {
+            display: none;
+        }
+
+        #hamburger-btn {
+            font-size: 1.8rem;
+            color: #fff;
+            cursor: pointer;
+            display: none;
+            order: 1;
+        }
+
+        .logo-img {
+            width: 100px;
+            height: auto;
+        }
+
+        @media screen and (max-width: 1023px) {
+            .navbar .logo a {
+                font-size: 1.5rem;
+            }
+
+            .links {
+                position: fixed;
+                left: -100%;
+                top: 75px;
+                width: 100%;
+                height: 100vh;
+                padding-top: 50px;
+                background: #000000;
+                flex-direction: column;
+                transition: 0.3s ease;
+            }
+
+            .navbar #menu-toggle:checked ~ .links {
+                left: 0;
+            }
+
+            .navbar #hamburger-btn {
+                display: block;
+            }
+        }
+
+        .invoice-container {
+            width: 80%;
+            max-width: 1000px;
+            margin-top: 100px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);            
+            margin-top: 150px; /* Add this line to push the content below the navbar */
+
+            overflow-x: auto;
+        }
+
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .invoice-header h1 {
+            color: #000000;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .invoice-header p {
+            font-size: 1.1rem;
+            color: #000000;
+        }
+
+        .invoice-details {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            color: #000000;
+            flex-wrap: wrap;
+        }
+
+        .invoice-details .info {
+            width: 45%;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .invoice-details .info h2 {
+            font-size: 1.3rem;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+
+        .invoice-details .info p {
+            line-height: 1.7;
+        }
+
+        .invoice-items {
+            margin-bottom: 40px;
+        }
+
+        .invoice-items h2 {
+            font-size: 1.5rem;
+            color: #000000;
+            margin-bottom: 20px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .invoice-items table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            display: table;
+            table-layout: fixed;
+        }
+
+        .invoice-items table thead th {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #000000;
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+            font-size: 1.1rem;
+            white-space: nowrap;
+        }
+
+        .invoice-items table tbody tr:nth-child(odd) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .invoice-items table tbody td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 1rem;
+            color: #000000;
+            white-space: nowrap;
+        }
+
+        .invoice-items table tbody td:nth-child(2),
+        .invoice-items table tbody td:nth-child(3),
+        .invoice-items table tbody td:nth-child(4) {
+            text-align: center;
+        }
+
+        .invoice-items table tfoot td {
+            padding: 15px 20px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #000000;
+            white-space: nowrap;
+        }
+
+        .invoice-summary {
+            margin-top: 40px;
+            text-align: right;
+            font-size: 1.1rem;
+            color: #000000;
+        }
+
+        .invoice-summary p {
+            margin: 10px 0;
+        }
+
+        .invoice-summary p:last-child {
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-top: 2px solid #ddd;
+            padding-top: 15px;
+            color: #000000;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .button-container button,
+        .button-container a {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background-color: #00458b;
+            color: white;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+            margin-left: 15px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .button-container button:hover,
+        .button-container a:hover {
+            background-color: #003366;
+        }
+
+        @media print {
+            body {
+                background-color: #fff;
+            }
+
+            .invoice-container {
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                border: none;
+            }
+
+            .button-container {
+                display: none;
+            }
+
+            .header {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <img width="5%" height="auto" src="Assets/LogoB.png" alt="Picture not found" style="margin-right: 100px;"/>
+            <h3 class="logo"><a align="left">Island Vybz Electric Bikes</a></h3>
+            <ul class="links">
+                <li><a href="AboutUs.html">About Us</a></li>
+                <li>
+                    <div class="buttons">
+                        <a href="Login.html">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="invoice-container">
+        <header class="invoice-header">
+            <h1>Invoice</h1>
+        </header>
+
+        <div class="invoice-details">
+            <div class="info">
+                <h2>Shipping Information</h2>
+                <p>
+                    <strong>Name:</strong> <span id="shippingFullName"></span><br>
+                    <strong>Address:</strong> <span id="shippingAddress"></span><br>
+                    <strong>Phone:</strong> <span id="shippingPhone"></span><br>
+                    <strong>TRN:</strong> <span id="shippingTRN"></span>
+                </p>
+            </div>
+            <div class="info">
+                <h2>Invoice Details</h2>
+                <p>
+                    <strong>Date:</strong> <span id="invoiceDate"></span><br>
+                    <strong>Invoice Number:</strong> <span id="invoiceNumber"></span>
+                </p>
+            </div>
+        </div>
+
+        <section class="invoice-items">
+            <h2>Order Summary</h2>
+            <table id="orderTable">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Total</td>
+                        <td id="orderTotal"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+
+        <div class="invoice-summary">
+            <p>Subtotal: $<span id="subtotal">0.00</span></p>
+            <p>Tax (15%): $<span id="salesTax">0.00</span></p>
+            <p>Shipping: $<span id="shipping">0.00</span></p>
+            <p>Total: $<span id="aftertax">0.00</span></p>
+        </div>
+        <div class="button-container">
+            <button class="print-button" onclick="window.print()">Print Invoice</button>
+            <button class="save-button" id="savePdf">Save as PDF</button>
+            <a href="ProductPage.html" class="continue-button">Continue Shopping</a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script>
+        window.onload = function () {
+            // Validate session
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('You must be logged in to view the invoice.');
+                window.location.href = 'Login.html';
+                return;
+            }
+
+            const userTRN = currentUser.trn;
+
+            // Retrieve invoice data for this user
+            const invoiceData = JSON.parse(localStorage.getItem('InvoiceData')) || {};
+            const userInvoices = invoiceData[userTRN] || [];
+
+            if (userInvoices.length === 0) {
+                alert('No invoice found for this user.');
+                window.location.href = 'ProductPage.html';
+                return;
+            }
+
+            // Get the latest invoice (assuming the most recent is the last one added)
+            const latestInvoice = userInvoices[userInvoices.length - 1];
+
+            // Generate a unique invoice number if it doesn't already exist
+            if (!latestInvoice.invoiceNumber) {
+                latestInvoice.invoiceNumber = `INV-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                localStorage.setItem('InvoiceData', JSON.stringify(invoiceData)); // Save updated invoice data
+            }
+
+            // Populate shipping information
+            document.getElementById('shippingFullName').textContent = latestInvoice.fullName;
+            document.getElementById('shippingAddress').textContent = latestInvoice.address;
+            document.getElementById('shippingPhone').textContent = latestInvoice.phone;
+            document.getElementById('shippingTRN').textContent = latestInvoice.trn;
+            document.getElementById('invoiceDate').textContent = new Date(latestInvoice.date).toLocaleDateString();
+            document.getElementById('invoiceNumber').textContent = latestInvoice.invoiceNumber; // Use the stored invoice number
+            document.getElementById('subtotal').textContent = latestInvoice.subtotal.toFixed(2);
+            document.getElementById('salesTax').textContent = latestInvoice.tax.toFixed(2);
+            document.getElementById('shipping').textContent = latestInvoice.shipping.toFixed(2);
+            document.getElementById('aftertax').textContent = latestInvoice.total.toFixed(2);
+
+            // Display cart items
+            const orderTableBody = document.querySelector('#orderTable tbody');
+            latestInvoice.items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td style="text-align: center;">${item.quantity}</td>
+                    <td style="text-align: center;">$${item.price.toFixed(2)}</td>
+                    <td style="text-align: center;">$${(item.price * item.quantity).toFixed(2)}</td>
+                `;
+                orderTableBody.appendChild(row);
+            });
+
+            // Display total
+            document.getElementById('orderTotal').textContent = latestInvoice.total.toFixed(2);
+
+            // Save as PDF functionality
+            document.getElementById('savePdf').addEventListener('click', function() {
+                const element = document.querySelector('.invoice-container');
+                const opt = {
+                    margin: 10,
+                    filename: 'invoice.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                html2pdf(element, opt);
+            });
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (currentUser) {
+                const navbar = document.querySelector('.navbar .links');
+                const userGreeting = document.createElement('li');
+                userGreeting.textContent = `Hi, ${currentUser.name}`;
+                userGreeting.style.color = '#fff';
+                userGreeting.style.fontWeight = 'bold';
+                userGreeting.style.marginLeft = '0px'; // Adjust spacing
+                userGreeting.style.whiteSpace = 'nowrap'; // Prevent text wrapping
+                navbar.appendChild(userGreeting);
+            }
+        });
+    </script>
+</body>
+</html>
+

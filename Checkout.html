@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(-45deg, #3fd2c7, #99ddff, #00458b, #3fd2c7);
+            zoom: 80%; /* Adjust the zoom to 80% */
+            background-size: 400% 400%;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1001;
+        }
+
+        .navbar {
+            position: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 2000px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            padding: 20px 200px;
+            z-index: 1002;
+            opacity: 1;
+            background-color: #000000;
+            height: 60px;
+        }
+
+        .navbar .logo a {
+            font-size: 1.8rem;
+            text-decoration: none;
+            color: #00458b;
+        }
+
+        .navbar .links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 35px;
+        }
+
+        .navbar .links a {
+            font-weight: 500;
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 0;
+            transition: 0.2s ease;
+        }
+
+        .navbar .links a:hover {
+            color: #99ddff;
+        }
+
+        .navbar .buttons a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1rem;
+            padding: 15px 0;
+            transition: 0.2s ease;
+        }
+
+        .navbar .buttons a:not(:last-child) {
+            margin-right: 30px;
+        }
+
+        #menu-toggle {
+            display: none;
+        }
+
+        #hamburger-btn {
+            font-size: 1.8rem;
+            color: #fff;
+            cursor: pointer;
+            display: none;
+            order: 1;
+        }
+
+        .logo-img {
+            width: 100px;
+            height: auto;
+        }
+
+        @media screen and (max-width: 1023px) {
+            .navbar .logo a {
+                font-size: 1.5rem;
+            }
+
+            .links {
+                position: fixed;
+                left: -100%;
+                top: 75px;
+                width: 100%;
+                height: 100vh;
+                padding-top: 50px;
+                background: #000000;
+                flex-direction: column;
+                transition: 0.3s ease;
+            }
+
+            .navbar #menu-toggle:checked ~ .links {
+                left: 0;
+            }
+
+            .navbar #hamburger-btn {
+                display: block;
+            }
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 90px auto 30px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            margin-top: 150px; /* Add this line to push the content below the navbar */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #00458b;
+        }
+
+        h2 {
+            color: #00458b;
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        .cart-summary ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cart-summary li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .cart-summary li img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+
+        .cart-summary li .details {
+            flex: 1;
+        }
+
+        .cart-summary li .details .name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #00458b;
+        }
+
+        .cart-summary li .details .price {
+            font-size: 1rem;
+            color: #3fd2c7;
+        }
+
+        .cart-summary li .details .quantity {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .cart-summary li .remove-btn {
+            background-color: #00458b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-summary li .remove-btn:hover {
+            background-color: #003366;
+        }
+
+        .cart-summary p {
+            text-align: right;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            color: #00458b;
+        }
+
+        .shipping-details form label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #00458b;
+        }
+
+        .shipping-details form input,
+        .shipping-details form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .shipping-details form textarea {
+            resize: vertical;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        #confirm-btn {
+            background-color: #00458b;
+            color: white;
+        }
+
+        #confirm-btn:hover {
+            background-color: #003366;
+        }
+
+        #cancel-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        #cancel-btn:hover {
+            background-color: #545b62;
+        }
+
+        .price-summary {
+            text-align: right;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            color: #00458b;
+        }
+
+        .price-summary p {
+            margin: 5px 0;
+        }
+
+        .price-summary p:last-child {
+            margin-top: 10px;
+            font-size: 1.3rem;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+
+        .cart-summary,
+        .shipping-details {
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+            padding: 20px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <img width="5%" height="auto" src="Assets/LogoB.png" alt="Picture not found" style="margin-right: 100px;"/>
+            <h3 class="logo"><a align="left">Island Vybz Electric Bikes</a></h3>
+            <input type="checkbox" id="menu-toggle" aria-controls="mobile-menu" aria-expanded="false" aria-label="Toggle navigation" />
+            <label for="menu-toggle" id="hamburger-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                    <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </label>
+            <ul class="links" id="mobile-menu">
+                <li><a href="AboutUs.html">About Us</a></li>
+                <li>
+                    <div class="buttons">
+                        <a href="Login.html">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Checkout</h1>
+        <section class="cart-summary">
+            <h2>Cart Summary</h2>
+            <ul id="cartItems">
+            </ul>
+            <p id="empty-cart-message" class="empty-cart-message">Your cart is empty.</p>
+            <div class="price-summary">
+                <p><strong>Subtotal: $<span id="subtotal">0.00</span></strong></p>
+                <p><strong>Tax (15%): $<span id="tax">0.00</span></strong></p>
+                <p><strong>Shipping: $<span id="shipping">0.00</span></strong></p>
+                <p><strong>Total: $<span id="totalPrice">0.00</span></strong></p>
+            </div>
+        </section>
+
+        <section class="shipping-details">
+            <h2>Shipping Details</h2>
+            <form id="shipping-form">
+                <div class="form-group">
+                    <label for="fullName">Full Name:</label>
+                    <input type="text" id="fullName" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number (xxx-xxx-xxxx):</label>
+                    <input type="tel" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="Please enter a valid 10-digit phone number" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="trn">Taxpayer Registration Number (xxx-xxx-xxx):</label>
+                    <input type="tel" id="trn" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" title="Please enter a valid 9-digit TRN" required />
+                </div>
+            </form>
+        </section>
+
+        <div class="buttons">
+            <button id="confirm-btn">Confirm Checkout</button>
+            <button id="cancel-btn">Cancel</button>
+        </div>
+    </main>
+
+    <script>
+        // Validate session on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            
+            if (!currentUser) {
+                alert('You must be logged in to complete your order.');
+                // Redirect to login if no active session
+                window.location.href = 'Login.html';
+            }
+        });
+
+        // Function to update the cart display
+        function updateCartDisplay() {
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('You must be logged in to view the cart.');
+                return;
+            }
+
+            const userTRN = currentUser.trn;
+
+            // Retrieve cart data for this user
+            const cartData = JSON.parse(localStorage.getItem('CartData')) || {};
+            const userCart = cartData[userTRN] || [];
+
+            const cartItemsList = document.getElementById('cartItems');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+
+            // Get all price elements
+            const subtotalElement = document.getElementById('subtotal');
+            const taxElement = document.getElementById('tax');
+            const shippingElement = document.getElementById('shipping');
+            const totalPriceElement = document.getElementById('totalPrice');
+            const shippingRow = document.querySelector('.price-summary p:nth-child(3)');
+
+            // Calculate current totals from scratch
+            const subtotal = userCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.15;
+            const shipping = userCart.length > 0 ? 750.00 : 0.00;
+            const total = subtotal + tax + shipping;
+
+            // Update localStorage with current values
+            localStorage.setItem('total', subtotal.toFixed(2));
+            localStorage.setItem('salesTax', tax.toFixed(2));
+            localStorage.setItem('shipping', shipping.toFixed(2));
+            localStorage.setItem('aftertax', total.toFixed(2));
+
+            cartItemsList.innerHTML = '';
+            emptyCartMessage.style.display = userCart.length === 0 ? 'block' : 'none';
+            shippingRow.style.display = userCart.length === 0 ? 'none' : 'block';
+
+            subtotalElement.textContent = subtotal.toFixed(2);
+            taxElement.textContent = tax.toFixed(2);
+            shippingElement.textContent = shipping.toFixed(2);
+            totalPriceElement.textContent = total.toFixed(2);
+
+            // Display cart items
+            userCart.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="details">
+                        <div class="name">${item.name}</div>
+                        <div class="price">$${item.price.toFixed(2)}</div>
+                        <div class="quantity">Quantity: ${item.quantity}</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeItemFromCart(${index})">Remove</button>
+                `;
+                cartItemsList.appendChild(li);
+            });
+        }
+
+        // Function to remove an item from the cart
+        function removeItemFromCart(index) {
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('You must be logged in to update the cart.');
+                return;
+            }
+
+            const userTRN = currentUser.trn;
+
+            // Retrieve cart data for this user
+            const cartData = JSON.parse(localStorage.getItem('CartData')) || {};
+            const userCart = cartData[userTRN] || [];
+
+            // Remove the item at the specified index
+            userCart.splice(index, 1);
+
+            // Update the cart data for this user
+            cartData[userTRN] = userCart;
+            localStorage.setItem('CartData', JSON.stringify(cartData));
+
+            // Update the cart display and totals
+            updateCartDisplay();
+        }
+
+        // Strict validation function for TRN and phone
+    function validateInputs() {
+        const trn = document.getElementById('trn').value.replace(/\D/g, ''); // Remove all non-digits
+        const phone = document.getElementById('phone').value.replace(/\D/g, ''); // Remove all non-digits
+        
+        // Validate TRN (must be exactly 9 digits)
+        if (trn.length !== 9) {
+            alert("TRN must be exactly 9 digits");
+            return false;
+        }
+        
+        // Validate phone (must be exactly 10 digits)
+        if (phone.length !== 10) {
+            alert("Phone number must be exactly 10 digits");
+            return false;
+        }
+        
+        return true;
+    }
+
+    // Generate a unique invoice number
+    const generateInvoiceNumber = () => {
+        return `INV-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    };
+
+    // Initialize the page and set up button event listeners
+    window.onload = function() {
+        updateCartDisplay();
+
+        // Confirm button event listener
+        document.getElementById('confirm-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('You must be logged in to proceed to checkout.');
+                return;
+            }
+
+            const userTRN = currentUser.trn;
+
+            // Validate shipping details
+            const fullName = document.getElementById('fullName').value;
+            const address = document.getElementById('address').value;
+            const phone = document.getElementById('phone').value;
+            const trn = document.getElementById('trn').value;
+
+            if (!fullName || !address || !phone || !trn) {
+                alert('Please fill out all shipping details.');
+                return;
+            }
+
+            if (!validateInputs()) {
+                return; // Stop if validation fails
+            }
+
+            // Retrieve cart data for this user
+            const cartData = JSON.parse(localStorage.getItem('CartData')) || {};
+            const userCart = cartData[userTRN] || [];
+
+            if (userCart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            // Save shipping details and cart data
+            const invoiceData = JSON.parse(localStorage.getItem('InvoiceData')) || {};
+            if (!invoiceData[userTRN]) {
+                invoiceData[userTRN] = [];
+            }
+
+            const newInvoice = {
+                invoiceNumber: generateInvoiceNumber(), // Add unique invoice number
+                fullName,
+                address,
+                phone,
+                trn,
+                items: userCart,
+                subtotal: parseFloat(localStorage.getItem('total')),
+                tax: parseFloat(localStorage.getItem('salesTax')),
+                shipping: parseFloat(localStorage.getItem('shipping')),
+                total: parseFloat(localStorage.getItem('aftertax')),
+                date: new Date().toISOString()
+            };
+
+            invoiceData[userTRN].push(newInvoice);
+            localStorage.setItem('InvoiceData', JSON.stringify(invoiceData));
+
+            // Clear the user's cart
+            cartData[userTRN] = [];
+            localStorage.setItem('CartData', JSON.stringify(cartData));
+
+            // Redirect to the invoice page
+            window.location.href = 'Invoice.html';
+        });
+
+        // Cancel button
+        document.getElementById('cancel-btn').addEventListener('click', function() {
+            window.location.href = 'Cart.html';
+        });
+
+        // Auto-format TRN as XXX-XXX-XXX
+        document.getElementById('trn').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 6) value = value.slice(0, 3) + '-' + value.slice(3, 6) + '-' + value.slice(6, 9);
+            else if (value.length > 3) value = value.slice(0, 3) + '-' + value.slice(3, 6);
+            e.target.value = value;
+        });
+
+        // Auto-format phone as XXX-XXX-XXXX
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 6) value = value.slice(0, 3) + '-' + value.slice(3, 6) + '-' + value.slice(6, 10);
+            else if (value.length > 3) value = value.slice(0, 3) + '-' + value.slice(3, 6);
+            e.target.value = value;
+        });
+    };
+
+    document.getElementById('cancel-btn').addEventListener('click', function() {
+        window.location.href = 'Cart.html';
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (currentUser) {
+                const navbar = document.querySelector('.navbar .links');
+                const userGreeting = document.createElement('li');
+                userGreeting.textContent = `Hi, ${currentUser.name}`;
+                userGreeting.style.color = '#fff';
+                userGreeting.style.fontWeight = 'bold';
+                userGreeting.style.marginLeft = '0px'; // Adjust spacing
+                userGreeting.style.whiteSpace = 'nowrap'; // Prevent text wrapping
+                navbar.appendChild(userGreeting);
+            }
+        });
+    </script>
+</body>
+</html>

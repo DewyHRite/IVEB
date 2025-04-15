@@ -1,0 +1,80 @@
+<!-- Ash (whats her real name again?) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Island Vybz Electric Bikes | Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div>
+    <header class="header">
+    <nav class="navbar">
+        <img width="5%" height="auto" src="Assets/LogoB.png" alt="Picture not found" style="margin-right: 100px;"/>
+        <h3 class="logo"><a>Island Vybz Electric Bikes</a></h3>
+        <input type="checkbox" id="menu-toggle" />
+        <label for="menu-toggle" id="hamburger-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+            <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        </label>
+        <ul class="links">
+            <li>
+                <div class="links">
+                    <a href="AboutUs2.html">About Us</a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    </header>
+</div>
+
+ <div class="container">
+ <div class="form-container">
+ <div class="logo">
+ <h1 align="center">Login</h1><br>
+                
+ </div>
+ <form id="loginForm" class="form">
+ <div class="form-group">
+ <label for="loginTRN">TRN *</label>
+ <input type="tel" id="loginTRN" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" title="Please enter a valid 9-digit TRN" placeholder="000-000-000" required>
+ 
+ </div>            
+ <div class="form-group">
+ <label for="loginPassword">Password *</label>
+ <input type="password" id="loginPassword" required>
+ </div>
+                
+  <div class="button-group">
+  <button type="submit" class="btn">Login</button>
+  <button type="button" id="loginCancelBtn" class="btn btn-cancel">Cancel</button>
+ </div><br><br>
+
+ <div>
+    <button type="button" id="loginToDashboardBtn" class="btn">Login to Dashboard</button>
+ </div>           
+ 
+ <div class="form-group text-center">
+ <br><a href="#" id="resetPasswordLink">Reset Password</a>
+ </div>
+
+ </form>
+
+ <div id="loginMessage" class="message"></div>
+   
+ <div class="switch-link">
+ <p>Don't have an account? <a href="Registration.html">Register here</a></p>
+</div>
+       
+ <script src="page.js"></script>
+</body>
+</html>
